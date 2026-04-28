@@ -1,4 +1,4 @@
-# 🏡 Sistema de Gestión de Residentes y Cuidadores
+# 🏡 Sistema de Gestión de Residentes y Cuidadores de una Casa Hogar / Adultos Mayores
 
 Este proyecto consiste en la creación y manipulación de una base de datos relacional utilizando SQLite para gestionar información de residentes y cuidadores en una institución.
 
@@ -67,3 +67,14 @@ El archivo `proyecto.sql` incluye datos de ejemplo para ambas tablas mediante se
 
 ```sql
 SELECT * FROM residents;
+
+## 2. Mostrar solo el nombre de los residentes ordenados alfabéticamente
+
+SELECT name_resident, age_resident
+FROM   residents
+ORDER BY name_resident DESC;
+
+## 3. Contar cuántos residentes tiene en total
+
+SELECT COUNT(*) AS total_residents
+FROM   residents;
