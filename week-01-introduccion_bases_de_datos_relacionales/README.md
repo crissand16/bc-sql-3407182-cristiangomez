@@ -63,9 +63,8 @@ El archivo `proyecto.sql` incluye datos de ejemplo para ambas tablas mediante se
 
 ## 🔍 Consultas Implementadas
 
-### 1. Mostrar todos los residentes
-
 ```sql
+### 1. Mostrar todos los residentes
 SELECT * FROM residents;
 
 ## 2. Mostrar solo el nombre de los residentes ordenados alfabéticamente
