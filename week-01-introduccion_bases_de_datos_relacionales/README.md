@@ -5,14 +5,10 @@ Este proyecto consiste en la creación y manipulación de una base de datos rela
 ---
 
 ## 📁 Estructura del Proyecto
-bc-sql/
-│
-├── week-01-introduccion_bases_de_datos_relacionales
-├──────starter
-├─────────mi_dominio.db
-├─────────proyecto.sql
-├─────────sqlite3
-└──────README.md # Documentación del proyecto
+
+### Imágen
+
+![Estrucutra proyecto](/assets/estructura_proyecto.png)
 
 ---
 
@@ -60,36 +56,47 @@ Contiene la información de los cuidadores.
 El archivo `proyecto.sql` incluye datos de ejemplo para ambas tablas mediante sentencias `INSERT`.
 
 ### 1. INSERT tabla residents
+```sql
 INSERT INTO residents (name_resident, age_resident, room_resident, entry_date_resident) VALUES
 ('María López', 78, '101A', '2024-01-10'),
 ('Carlos Pérez', 82, '102B', '2023-11-05'),
 ('Ana Gómez', 75, '103A', '2024-02-20'),
 ('Luis Torres', 80, '104C', '2023-12-15'),
 ('Rosa Martínez', 77, '105B', '2024-03-01');
+```
 
 ### 2. INSERT tabla caregivers
+```sql
 INSERT INTO caregivers (name_caregiver, turno_caregiver, email_caregiver, phone_caregiver) VALUES
 ('Juan Rodríguez', 'Día', 'juan.rodriguez@email.com', '3001234567'),
 ('Laura Sánchez', 'Noche', 'laura.sanchez@email.com', '3007654321'),
 ('Pedro Ramírez', 'Día', 'pedro.ramirez@email.com', '3011111111'),
 ('Sofía Herrera', 'Tarde', 'sofia.herrera@email.com', '3022222222'),
 ('Miguel Castro', 'Noche', 'miguel.castro@email.com', '3033333333');
+```
 
 ---
 
 ## 🔍 Consultas Implementadas
 
-```sql
 ### 1. Mostrar todos los residentes
+
+```sql
 SELECT * FROM residents;
+```
+
 
 ## 2. Mostrar solo el nombre de los residentes ordenados alfabéticamente
 
+```sql
 SELECT name_resident, age_resident
 FROM   residents
 ORDER BY name_resident DESC;
+```
 
 ## 3. Contar cuántos residentes tiene en total
 
+```sql
 SELECT COUNT(*) AS total_residents
 FROM   residents;
+```
