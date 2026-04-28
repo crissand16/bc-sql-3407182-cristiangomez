@@ -1,3 +1,8 @@
+--Eliminamos las tablas para evitar errores de duplicacion de datos
+DROP TABLE IF EXISTS residents;
+DROP TABLE IF EXISTS caregivers;
+
+
 --Crea Tabla Residentes.
 CREATE TABLE IF NOT EXISTS residents (
     id_resident         INTEGER PRIMARY KEY,
