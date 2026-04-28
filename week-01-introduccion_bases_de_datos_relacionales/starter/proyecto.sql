@@ -46,6 +46,6 @@ SELECT name_resident, age_resident
 FROM   residents
 ORDER BY name_resident DESC;
 
---Contar cuántos items tienes en total
+--Contar cuántos residentes tiene en total
 SELECT COUNT(*) AS total_residents
 FROM   residents;
