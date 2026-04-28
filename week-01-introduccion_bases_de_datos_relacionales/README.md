@@ -4,14 +4,6 @@ Este proyecto consiste en la creación y manipulación de una base de datos rela
 
 ---
 
-## 📁 Estructura del Proyecto
-
-### Imágen
-
-![Estrucutra proyecto](/assets/estructura_proyecto.png)
-
----
-
 ## 🛠️ Tecnologías Utilizadas
 
 - SQLite3
