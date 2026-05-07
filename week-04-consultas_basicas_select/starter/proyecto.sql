@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS caregivers (
 );
 
 CREATE TABLE IF NOT EXISTS health_records (
-    id              INTEGER PRIMARY KEY,
+    id_health_record            INTEGER PRIMARY KEY,
     resident_id     INTEGER NOT NULL,
     record_date     DATE    NOT NULL DEFAULT CURRENT_DATE,
     diagnosis       TEXT    NOT NULL,
@@ -55,7 +55,7 @@ VALUES
 
 
 -- INSERTAR EN TABLA HIJO: health_records (respeta FK con residents)
-INSERT INTO health_records (id, resident_id, diagnosis, treatment, vital_status)
+INSERT INTO health_records (id_health_record, resident_id, diagnosis, treatment, vital_status)
 VALUES
     (1, 1, 'Hipertensión', 'Medicamentos antihipertensivos', 'stable'),
     (2, 2, 'Diabetes', 'Insulina diaria', 'under observation'),
@@ -63,34 +63,73 @@ VALUES
     (4, 4, 'Neumonía', 'Antibióticos', 'critical'),
     (5, 5, 'Problemas cardíacos', 'Control médico constante', 'under observation');
 
+-- ============================================
+-- CONSULTA 1: Listado general con columnas explícitas
+
+SELECT
+    id_resident AS id_residente,
+    name_resident AS nombre_residente,
+    document_id_resident AS documento,
+    birth_date_resident AS fecha_nacimiento,
+    gender_resident AS genero
+FROM residents;
 
 
--- Actualizar una columna por PK
-UPDATE residents
-SET name_resident = 'Carlos Rodriguez'
-WHERE id_resident = 1;
+-- ============================================
+-- CONSULTA 2: Filtro por condición simple
 
--- Actualizar múltiples columnas de una fila
-UPDATE caregivers
-SET phone_caregiver = '3009999999',
-    turno_caregiver = 'night'
-WHERE id_caregiver = 2;
-
--- Actualizar múltiples filas (regla de negocio)
-UPDATE residents
-SET is_active = 0
-WHERE birth_date_resident < '1945-01-01';
-
--- Verificar qué registros se eliminarán
-SELECT id, resident_id, diagnosis
+SELECT
+    id_health_record,
+    resident_id,
+    diagnosis,
+    vital_status
 FROM health_records
-WHERE vital_status = 'critical';
-
--- Eliminar esos registros
-DELETE FROM health_records
-WHERE vital_status = 'critical';
+WHERE diagnosis = 'Diabetes';
 
 
-SELECT id_resident, name_resident, document_id_resident, birth_date_resident, gender_resident, admission_date_resident FROM residents ORDER BY id_resident;
-SELECT id_caregiver, name_caregiver, email_caregiver, phone_caregiver, turno_caregiver, hire_date_caregiver FROM caregivers ORDER BY id_caregiver;
-SELECT resident_id, record_date, diagnosis, treatment, notes, vital_status FROM health_records ORDER BY id;
+-- ============================================
+-- CONSULTA 3: Filtro combinado (AND / OR)
+
+SELECT
+    id_health_record,
+    resident_id,
+    diagnosis,
+    vital_status
+FROM health_records
+WHERE vital_status = 'stable'
+  AND is_active = 1;
+
+
+-- ============================================
+-- CONSULTA 4: Top-N con ORDER BY + LIMIT
+
+SELECT
+    id_resident,
+    name_resident,
+    admission_date_resident
+FROM residents
+ORDER BY admission_date_resident DESC
+LIMIT 5;
+
+
+-- ============================================
+-- CONSULTA 5: Paginación (página 1 y página 2)
+
+-- Página 1
+SELECT
+    id_resident,
+    name_resident,
+    gender_resident
+FROM residents
+ORDER BY name_resident ASC
+LIMIT 3 OFFSET 0;
+
+
+-- Página 2
+SELECT
+    id_resident,
+    name_resident,
+    gender_resident
+FROM residents
+ORDER BY name_resident ASC
+LIMIT 3 OFFSET 3;
