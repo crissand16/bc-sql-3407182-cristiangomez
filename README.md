@@ -1,231 +1,185 @@
-# 🏡 Proyecto Semana 04 — Consultas SELECT en SQLite3
+# 🏥 Sistema de Gestión Casa Hogar/Adultos Mayores
 
-## 📖 Descripción
+Este proyecto consiste en la creación y manipulación de una base de datos en **SQLite3** para la administración.
 
-Este proyecto corresponde a la práctica de consultas SQL utilizando **SQLite3** en el dominio de una **Casa Hogar para Adultos Mayores** 👴👵.
+La base de datos permite gestionar:
 
-El sistema administra información relacionada con:
-
-- 🧓 Residentes
-- 👩‍⚕️ Cuidadores
-- 🩺 Historiales médicos
-
-Durante el desarrollo se aplicaron consultas usando:
-
-- ✅ `SELECT`
-- ✅ `WHERE`
-- ✅ `ORDER BY`
-- ✅ `LIMIT`
-- ✅ `OFFSET`
+- Residentes
+- Cuidadores
+- Historiales médicos
+- Actividades realizadas por los residentes
 
 ---
 
-# 🛠️ Tecnologías utilizadas
+# 📂 Tecnologías utilizadas
 
-- 💾 SQLite3
-- 📜 SQL
-
----
-
-# 🗂️ Estructura de la Base de Datos
-
-## 👴 Tabla: `residents`
-
-Almacena la información de los residentes.
-
-| Campo | Tipo |
-|---|---|
-| `id_resident` | INTEGER |
-| `name_resident` | TEXT |
-| `document_id_resident` | TEXT |
-| `birth_date_resident` | DATE |
-| `gender_resident` | TEXT |
-| `admission_date_resident` | DATE |
-| `is_active` | INTEGER |
+- SQLite3
+- SQL
 
 ---
 
-## 👩‍⚕️ Tabla: `caregivers`
+# 🗄️ Estructura de la Base de Datos
 
-Almacena información de los cuidadores.
+El sistema está compuesto por 4 tablas principales:
 
-| Campo | Tipo |
-|---|---|
-| `id_caregiver` | INTEGER |
-| `name_caregiver` | TEXT |
-| `email_caregiver` | TEXT |
-| `phone_caregiver` | TEXT |
-| `turno_caregiver` | TEXT |
-| `hire_date_caregiver` | DATE |
-| `is_active` | INTEGER |
+## 1. residents
 
----
+Almacena la información de los residentes del geriátrico.
 
-## 🩺 Tabla: `health_records`
-
-Almacena historiales médicos de los residentes.
-
-| Campo | Tipo |
-|---|---|
-| `id_health_record` | INTEGER |
-| `resident_id` | INTEGER |
-| `record_date` | DATE |
-| `diagnosis` | TEXT |
-| `treatment` | TEXT |
-| `notes` | TEXT |
-| `vital_status` | TEXT |
-| `is_active` | INTEGER |
+| Campo                   | Tipo    | Descripción            |
+|-------------------------|---------|------------------------|
+| id_resident             | INTEGER | Identificador único    |
+| name_resident           | TEXT    | Nombre del residente   |
+| document_id_resident    | TEXT    | Documento de identidad |
+| birth_date_resident     | DATE    | Fecha de nacimiento    |
+| gender_resident         | TEXT    | Género                 |
+| admission_date_resident | DATE    | Fecha de ingreso       |
+| is_active               | INTEGER | Estado activo          |
 
 ---
 
-# 🚀 Cómo ejecutar el proyecto
+## 2. caregivers
 
-## 1️⃣ Abrir SQLite3
+Contiene la información de los cuidadores.
+
+| Campo               | Tipo    | Descripción           |
+|---------------------|---------|-----------------------|  
+| id_caregiver        | INTEGER | Identificador único   |
+| name_caregiver      | TEXT    | Nombre del cuidador   |
+| email_caregiver     | TEXT    | Correo electrónico    |
+| phone_caregiver     | TEXT    | Teléfono              |
+| turno_caregiver     | TEXT    | Turno laboral         |
+| hire_date_caregiver | DATE    | Fecha de contratación |
+| is_active           | INTEGER | Estado activo         |
+
+---
+
+## 3. health_records
+
+Guarda los registros médicos de los residentes.
+
+| Campo        | Tipo    | Descripción                |
+|--------------|---------|----------------------------|
+| id           | INTEGER | Identificador del registro |
+| resident_id  | INTEGER | ID del residente           |
+| record_date  | DATE    | Fecha del registro         |
+| diagnosis    | TEXT    | Diagnóstico                |
+| treatment    | TEXT    | Tratamiento                |
+| notes        | TEXT    | Notas adicionales          |
+| vital_status | TEXT    | Estado del residente       |
+| is_active    | INTEGER | Estado activo              |
+
+
+---
+
+## 4. activities
+
+Registra las actividades realizadas por los residentes.
+
+| Campo           | Tipo    | Descripción            |
+|-----------------|---------|------------------------|
+| id_activity     | INTEGER | Identificador          |
+| resident_id     | INTEGER | ID del residente       |
+| activity_name   | TEXT    | Nombre de la actividad |
+| activity_date   | DATE    | Fecha                  |
+| activity_type   | TEXT    | Tipo de actividad      |
+| activity_status | TEXT    | Estado                 |
+| observations    | TEXT    | Observaciones          |
+
+
+---
+
+# 📥 Datos Insertados
+
+Se agregaron datos de prueba para:
+
+- 5 residentes
+- 5 cuidadores
+- 5 registros médicos
+- 5 actividades
+
+---
+
+# 🔎 Consultas SQL Implementadas
+
+## 1. Uso de BETWEEN
+
+Consulta de residentes con IDs entre 2 y 4.
+
+```sql
+SELECT *
+FROM residents
+WHERE id_resident BETWEEN 2 AND 4;
+```
+
+---
+
+## 2. Uso de IN
+
+Consulta de cuidadores con turno de mañana o tarde.
+
+```sql
+SELECT *
+FROM caregivers
+WHERE turno_caregiver IN ('morning', 'afternoon');
+```
+
+---
+
+## 3. Uso de LIKE
+
+Búsqueda de diagnósticos que contienen la palabra `"card"`.
+
+```sql
+SELECT *
+FROM health_records
+WHERE diagnosis LIKE '%card%';
+```
+
+---
+
+## 4. Consulta combinada
+
+Actividades médicas o físicas completadas para residentes entre ID 1 y 4.
+
+```sql
+SELECT *
+FROM activities
+WHERE resident_id BETWEEN 1 AND 4
+  AND activity_type IN ('medical', 'physical')
+  AND activity_status LIKE '%mplet%'
+ORDER BY activity_date;
+```
+
+---
+
+# ▶️ Ejecución en SQLite3
+
+## Abrir SQLite
 
 ```bash
 sqlite3 casa_hogar.db
 ```
 
----
-
-## 2️⃣ Ejecutar el script SQL
-
-Copiar y pegar el contenido del archivo `.sql` dentro de SQLite3.
-
----
-
-## 3️⃣ Verificar tablas creadas
+## Ejecutar el script SQL
 
 ```sql
-.tables
+.read proyecto.sql
 ```
 
 ---
 
-## 4️⃣ Ver estructura de tablas
+# 📌 Características implementadas
 
-```sql
-.schema residents
-```
-
----
-
-# 🔎 Consultas implementadas
-
-## 📋 Consulta 1 — Listado general
-
-```sql
-SELECT
-    id_resident AS id_residente,
-    name_resident AS nombre_residente,
-    document_id_resident AS documento,
-    birth_date_resident AS fecha_nacimiento,
-    gender_resident AS genero
-FROM residents;
-```
-
----
-
-## 🔍 Consulta 2 — Filtro simple
-
-```sql
-SELECT
-    id_health_record,
-    resident_id,
-    diagnosis,
-    vital_status
-FROM health_records
-WHERE diagnosis = 'Diabetes';
-```
-
----
-
-## 🧠 Consulta 3 — Filtro combinado
-
-```sql
-SELECT
-    id_health_record,
-    resident_id,
-    diagnosis,
-    vital_status
-FROM health_records
-WHERE vital_status = 'stable'
-  AND is_active = 1;
-```
-
----
-
-## 📈 Consulta 4 — ORDER BY + LIMIT
-
-```sql
-SELECT
-    id_resident,
-    name_resident,
-    admission_date_resident
-FROM residents
-ORDER BY admission_date_resident DESC
-LIMIT 5;
-```
-
-📌 Esta consulta muestra los 5 residentes más recientes.
-
----
-
-## 📄 Consulta 5 — Paginación
-
-### 🥇 Página 1
-
-```sql
-SELECT
-    id_resident,
-    name_resident,
-    gender_resident
-FROM residents
-ORDER BY name_resident ASC
-LIMIT 3 OFFSET 0;
-```
-
-### 🥈 Página 2
-
-```sql
-SELECT
-    id_resident,
-    name_resident,
-    gender_resident
-FROM residents
-ORDER BY name_resident ASC
-LIMIT 3 OFFSET 3;
-```
-
----
-
-# 🧰 Comandos útiles en SQLite3
-
-## 📌 Mostrar tablas
-
-```sql
-.tables
-```
-
----
-
-## 📌 Mostrar estructura de una tabla
-
-```sql
-.schema nombre_tabla
-```
-
-
-# 🎯 Objetivo del proyecto
-
-Practicar consultas SQL básicas aplicando:
-
-- Selección de datos
-- Filtrado de registros
-- Ordenamiento
-- Límites de resultados
-- Paginación
-
-en un contexto real relacionado con el cuidado de adultos mayores 🏡❤️.
+- Uso de claves primarias (`PRIMARY KEY`)
+- Restricciones (`CHECK`)
+- Claves foráneas (`FOREIGN KEY`)
+- Valores únicos (`UNIQUE`)
+- Valores por defecto (`DEFAULT`)
+- Consultas con:
+  - `BETWEEN`
+  - `IN`
+  - `LIKE`
+  - `ORDER BY`
 
 ---
