@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS caregivers (
 );
 
 CREATE TABLE IF NOT EXISTS health_records (
-    id              INTEGER PRIMARY KEY,
+    id_health_record            INTEGER PRIMARY KEY,
     resident_id     INTEGER NOT NULL,
     record_date     DATE    NOT NULL DEFAULT CURRENT_DATE,
     diagnosis       TEXT    NOT NULL,
@@ -55,7 +55,7 @@ VALUES
 
 
 -- INSERTAR EN TABLA HIJO: health_records (respeta FK con residents)
-INSERT INTO health_records (id, resident_id, diagnosis, treatment, vital_status)
+INSERT INTO health_records (id_health_record, resident_id, diagnosis, treatment, vital_status)
 VALUES
     (1, 1, 'Hipertensión', 'Medicamentos antihipertensivos', 'stable'),
     (2, 2, 'Diabetes', 'Insulina diaria', 'under observation'),
@@ -90,7 +90,13 @@ WHERE vital_status = 'critical';
 DELETE FROM health_records
 WHERE vital_status = 'critical';
 
+--Seleccionar toda la tabla sin usar SELECT *
 
+--Ordena por id_resident con ORDER BY
 SELECT id_resident, name_resident, document_id_resident, birth_date_resident, gender_resident, admission_date_resident FROM residents ORDER BY id_resident;
+
+--Ordena por id_caregiver con ORDER BY
 SELECT id_caregiver, name_caregiver, email_caregiver, phone_caregiver, turno_caregiver, hire_date_caregiver FROM caregivers ORDER BY id_caregiver;
-SELECT resident_id, record_date, diagnosis, treatment, notes, vital_status FROM health_records ORDER BY id;
+
+--Ordena por id_health_record con ORDER BY
+SELECT resident_id, record_date, diagnosis, treatment, notes, vital_status FROM health_records ORDER BY id_health record;
