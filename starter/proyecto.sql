@@ -141,41 +141,51 @@ VALUES
 
 
 
--- ============================================
--- CONSULTA 1: BETWEEN
--- ============================================
--- Residentes con ID entre 2 y 4
-SELECT *
-FROM residents
-WHERE id_resident BETWEEN 2 AND 4;
+-- REPORTE 1: Totales globales
+SELECT
+    COUNT(*) AS total_registros,
+    SUM(is_active) AS residentes_activos,
+    AVG(
+        CAST(
+            (julianday('now') - julianday(birth_date_resident)) / 365
+            AS INTEGER
+        )
+    ) AS promedio_edad
+FROM residents;
 
 
--- ============================================
--- CONSULTA 2: IN
--- ============================================
--- Cuidadores de turno mañana y tarde
-SELECT *
-FROM caregivers
-WHERE turno_caregiver IN ('morning', 'afternoon');
+-- REPORTE 2: Extremos
+SELECT
+    MIN(
+        CAST(
+            (julianday('now') - julianday(birth_date_resident)) / 365
+            AS INTEGER
+        )
+    ) AS edad_minima,
+    
+    MAX(
+        CAST(
+            (julianday('now') - julianday(birth_date_resident)) / 365
+            AS INTEGER
+        )
+    ) AS edad_maxima
+FROM residents;
 
 
--- ============================================
--- CONSULTA 3: LIKE
--- ============================================
--- Buscar diagnósticos que contengan "card"
-SELECT *
-FROM health_records
-WHERE diagnosis LIKE '%card%';
-
-
--- ============================================
--- CONSULTA 4: FILTRO COMBINADO
--- ============================================
--- Actividades médicas o físicas completadas
--- con residentes entre ID 1 y 4
-SELECT *
+-- REPORTE 3: Subtotales por categoría (GROUP BY)
+SELECT
+    activity_type,
+    COUNT(*) AS total,
+    AVG(resident_id) AS promedio_residentes
 FROM activities
-WHERE resident_id BETWEEN 1 AND 4
-  AND activity_type IN ('medical', 'physical')
-  AND activity_status LIKE '%mplet%'
-ORDER BY activity_date;
+GROUP BY activity_type
+ORDER BY total DESC;
+
+
+-- REPORTE 4: Filtro de grupos (HAVING)  
+SELECT
+    vital_status,
+    COUNT(*) AS total
+FROM health_records
+GROUP BY vital_status
+HAVING COUNT(*) > 1;

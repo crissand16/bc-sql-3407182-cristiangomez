@@ -1,185 +1,142 @@
-# 🏥 Sistema de Gestión Casa Hogar/Adultos Mayores
+# 🏡 Sistema de Gestión para Casa Hogar de Adultos Mayores
 
-Este proyecto consiste en la creación y manipulación de una base de datos en **SQLite3** para la administración.
+## 📖 Descripción
 
-La base de datos permite gestionar:
+Este proyecto consiste en una base de datos desarrollada en **SQL** para la administración y gestión de una **Casa Hogar para Adultos Mayores** 👵👴.
 
-- Residentes
-- Cuidadores
-- Historiales médicos
-- Actividades realizadas por los residentes
+El sistema permite almacenar, organizar y consultar información importante relacionada con:
 
----
+- 🧓 Residentes
+- 👨‍⚕️ Cuidadores
+- 🩺 Historial médico
+- 🎯 Actividades 
 
-# 📂 Tecnologías utilizadas
-
-- SQLite3
-- SQL
+El objetivo principal es mejorar la organización de la información y facilitar el seguimiento integral de los residentes.
 
 ---
 
-# 🗄️ Estructura de la Base de Datos
+# 🛠️ Tecnologías Utilizadas
 
-El sistema está compuesto por 4 tablas principales:
-
-## 1. residents
-
-Almacena la información de los residentes del geriátrico.
-
-| Campo                   | Tipo    | Descripción            |
-|-------------------------|---------|------------------------|
-| id_resident             | INTEGER | Identificador único    |
-| name_resident           | TEXT    | Nombre del residente   |
-| document_id_resident    | TEXT    | Documento de identidad |
-| birth_date_resident     | DATE    | Fecha de nacimiento    |
-| gender_resident         | TEXT    | Género                 |
-| admission_date_resident | DATE    | Fecha de ingreso       |
-| is_active               | INTEGER | Estado activo          |
+- 💾 SQL
+- 🗄️ SQLite
 
 ---
 
-## 2. caregivers
+# 🧩 Estructura de la Base de Datos
 
-Contiene la información de los cuidadores.
-
-| Campo               | Tipo    | Descripción           |
-|---------------------|---------|-----------------------|  
-| id_caregiver        | INTEGER | Identificador único   |
-| name_caregiver      | TEXT    | Nombre del cuidador   |
-| email_caregiver     | TEXT    | Correo electrónico    |
-| phone_caregiver     | TEXT    | Teléfono              |
-| turno_caregiver     | TEXT    | Turno laboral         |
-| hire_date_caregiver | DATE    | Fecha de contratación |
-| is_active           | INTEGER | Estado activo         |
+La base de datos está compuesta por las siguientes tablas:
 
 ---
 
-## 3. health_records
+## 👵 Tabla: `residents`
 
-Guarda los registros médicos de los residentes.
+Almacena la información de los adultos mayores residentes.
 
-| Campo        | Tipo    | Descripción                |
-|--------------|---------|----------------------------|
-| id           | INTEGER | Identificador del registro |
-| resident_id  | INTEGER | ID del residente           |
-| record_date  | DATE    | Fecha del registro         |
-| diagnosis    | TEXT    | Diagnóstico                |
-| treatment    | TEXT    | Tratamiento                |
-| notes        | TEXT    | Notas adicionales          |
-| vital_status | TEXT    | Estado del residente       |
-| is_active    | INTEGER | Estado activo              |
-
+### 📌 Campos principales:
+- `id_resident`
+- `name_resident`
+- `document_id_resident`
+- `birth_date_resident`
+- `gender_resident`
+- `admission_date_resident`
+- `is_active`
 
 ---
 
-## 4. activities
+## 👨‍⚕️ Tabla: `caregivers`
 
-Registra las actividades realizadas por los residentes.
+Contiene la información de los cuidadores de la casa hogar.
 
-| Campo           | Tipo    | Descripción            |
-|-----------------|---------|------------------------|
-| id_activity     | INTEGER | Identificador          |
-| resident_id     | INTEGER | ID del residente       |
-| activity_name   | TEXT    | Nombre de la actividad |
-| activity_date   | DATE    | Fecha                  |
-| activity_type   | TEXT    | Tipo de actividad      |
-| activity_status | TEXT    | Estado                 |
-| observations    | TEXT    | Observaciones          |
-
+### 📌 Campos principales:
+- `id_caregiver`
+- `name_caregiver`
+- `email_caregiver`
+- `phone_caregiver`
+- `turno_caregiver`
+- `hire_date_caregiver`
+- `is_active`
 
 ---
 
-# 📥 Datos Insertados
+## 🩺 Tabla: `health_records`
 
-Se agregaron datos de prueba para:
+Registra el historial médico y estado de salud de los residentes.
 
-- 5 residentes
-- 5 cuidadores
-- 5 registros médicos
-- 5 actividades
-
----
-
-# 🔎 Consultas SQL Implementadas
-
-## 1. Uso de BETWEEN
-
-Consulta de residentes con IDs entre 2 y 4.
-
-```sql
-SELECT *
-FROM residents
-WHERE id_resident BETWEEN 2 AND 4;
-```
+### 📌 Campos principales:
+- `id`
+- `resident_id`
+- `record_date`
+- `diagnosis`
+- `treatment`
+- `notes`
+- `vital_status`
+- `is_active`
 
 ---
 
-## 2. Uso de IN
+## 🎯 Tabla: `activities`
 
-Consulta de cuidadores con turno de mañana o tarde.
+Guarda las actividades realizadas por los residentes.
 
-```sql
-SELECT *
-FROM caregivers
-WHERE turno_caregiver IN ('morning', 'afternoon');
-```
-
----
-
-## 3. Uso de LIKE
-
-Búsqueda de diagnósticos que contienen la palabra `"card"`.
-
-```sql
-SELECT *
-FROM health_records
-WHERE diagnosis LIKE '%card%';
-```
+### 📌 Campos principales:
+- `id_activity`
+- `resident_id`
+- `activity_name`
+- `activity_date`
+- `activity_type`
+- `activity_status`
+- `observations`
 
 ---
 
-## 4. Consulta combinada
+# 📊 Reportes SQL Implementados
 
-Actividades médicas o físicas completadas para residentes entre ID 1 y 4.
-
-```sql
-SELECT *
-FROM activities
-WHERE resident_id BETWEEN 1 AND 4
-  AND activity_type IN ('medical', 'physical')
-  AND activity_status LIKE '%mplet%'
-ORDER BY activity_date;
-```
+## 📌 Reporte 1: Totales Globales
+- Total de residentes
+- Residentes activos
+- Promedio de edad
 
 ---
 
-# ▶️ Ejecución en SQLite3
-
-## Abrir SQLite
-
-```bash
-sqlite3 casa_hogar.db
-```
-
-## Ejecutar el script SQL
-
-```sql
-.read proyecto.sql
-```
+## 📌 Reporte 2: Extremos
+- Edad mínima
+- Edad máxima
 
 ---
 
-# 📌 Características implementadas
+## 📌 Reporte 3: Agrupación por Categorías
+- Cantidad de actividades por tipo
 
-- Uso de claves primarias (`PRIMARY KEY`)
-- Restricciones (`CHECK`)
-- Claves foráneas (`FOREIGN KEY`)
-- Valores únicos (`UNIQUE`)
-- Valores por defecto (`DEFAULT`)
-- Consultas con:
-  - `BETWEEN`
-  - `IN`
-  - `LIKE`
-  - `ORDER BY`
+---
+
+## 📌 Reporte 4: Filtro con `HAVING`
+- Estados médicos con más de un registro
+
+---
+
+# 🚀 Ejecución del Proyecto
+
+## 1️⃣ Crear la Base de Datos
+Crear una base de datos en SQLite.
+
+## 2️⃣ Ejecutar el Script SQL
+Ejecutar el archivo con la creación de tablas.
+
+## 3️⃣ Insertar Datos
+Ejecutar los `INSERT INTO` para cargar los datos de prueba.
+
+## 4️⃣ Consultar Reportes
+Ejecutar las consultas SQL de reportes.
+
+---
+
+# 🎓 Objetivo Académico
+
+Este proyecto fue desarrollado con fines académicos para practicar:
+
+- 📚 Diseño de bases de datos
+- 🔑 Relaciones entre tablas
+- 🧠 Consultas SQL
+- 📊 Reportes y análisis de datos
 
 ---
