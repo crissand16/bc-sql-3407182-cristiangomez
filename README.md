@@ -1,15 +1,17 @@
 # 🏡 Sistema de Gestión para Casa Hogar de Adultos Mayores
 
-Este proyecto consiste en el diseño e implementación de una base de datos relacional en SQLite para la administración de una casa hogar de adultos mayores.
+## Proyecto Semana 09 — JOINs Aplicados al Dominio
 
-El sistema permite gestionar:
+Este proyecto consiste en el diseño e implementación de una base de datos relacional en SQLite para la administración de una casa hogar para adultos mayores.
+
+El sistema permite gestionar la información de:
 
 * Residentes
 * Cuidadores
-* Actividades
 * Historiales médicos
+* Actividades
 
-Además, implementa restricciones (`constraints`) y manejo de valores `NULL` utilizando SQL.
+Además, implementa relaciones entre tablas mediante claves foráneas y utiliza consultas SQL con **INNER JOIN**, **LEFT JOIN**, **GROUP BY** y **COUNT** para generar reportes relacionales.
 
 ---
 
@@ -18,7 +20,7 @@ Además, implementa restricciones (`constraints`) y manejo de valores `NULL` uti
 ```bash
 bc-sql/
 │
-├── mi_dominio.db
+├── casa_hogar.db
 ├── proyecto.sql
 └── README.md
 ```
@@ -34,19 +36,45 @@ bc-sql/
 
 ---
 
+# 🎯 Objetivos del Proyecto
+
+* Diseñar una base de datos relacional.
+* Implementar claves primarias y foráneas.
+* Aplicar restricciones de integridad.
+* Generar datos de prueba masivos.
+* Realizar consultas utilizando JOINs.
+* Detectar registros huérfanos.
+* Generar reportes agregados.
+
+---
+
 # 📋 Funcionalidades Implementadas
 
 ✅ Creación de tablas relacionales
+
 ✅ Uso de PRIMARY KEY
+
 ✅ Uso de FOREIGN KEY
+
 ✅ Restricciones NOT NULL
+
 ✅ Restricciones UNIQUE
+
 ✅ Restricciones CHECK
+
 ✅ Valores DEFAULT
-✅ Manejo de NULL
-✅ Uso de COALESCE
-✅ Inserción de datos de prueba
-✅ Consultas SQL
+
+✅ Generación automática de datos de prueba
+
+✅ INNER JOIN
+
+✅ LEFT JOIN
+
+✅ GROUP BY
+
+✅ COUNT
+
+✅ Reportes relacionales
 
 ---
 
@@ -54,13 +82,13 @@ bc-sql/
 
 ## Tabla: residents
 
-Almacena la información de los residentes de la casa hogar.
+Almacena la información de los residentes.
 
 | Campo                   | Tipo    | Restricciones        |
 | ----------------------- | ------- | -------------------- |
 | id_resident             | INTEGER | PRIMARY KEY          |
 | name_resident           | TEXT    | NOT NULL             |
-| document_id_resident    | TEXT    | NOT NULL, UNIQUE     |
+| document_id_resident    | TEXT    | UNIQUE               |
 | birth_date_resident     | DATE    | NOT NULL             |
 | gender_resident         | TEXT    | CHECK                |
 | admission_date_resident | DATE    | DEFAULT CURRENT_DATE |
@@ -86,7 +114,7 @@ Almacena información de los cuidadores.
 
 ## Tabla: health_records
 
-Almacena historiales médicos de los residentes.
+Almacena los historiales médicos.
 
 | Campo        | Tipo    | Restricciones        |
 | ------------ | ------- | -------------------- |
@@ -117,51 +145,11 @@ Almacena las actividades realizadas por los residentes.
 
 ---
 
-# 🔐 Constraints Utilizados
+# 🔗 Relaciones del Sistema
 
-## NOT NULL
+## residents ↔ health_records
 
-Evita que un campo obligatorio quede vacío.
-
-```sql
-name_resident TEXT NOT NULL
-```
-
----
-
-## UNIQUE
-
-Evita datos duplicados.
-
-```sql
-document_id_resident TEXT UNIQUE
-```
-
----
-
-## CHECK
-
-Valida valores permitidos.
-
-```sql
-CHECK (gender_resident IN ('M', 'F', 'Other'))
-```
-
----
-
-## DEFAULT
-
-Asigna valores automáticos.
-
-```sql
-admission_date_resident DATE DEFAULT CURRENT_DATE
-```
-
----
-
-## FOREIGN KEY
-
-Relaciona tablas entre sí.
+Un residente puede tener múltiples historiales médicos.
 
 ```sql
 FOREIGN KEY (resident_id)
@@ -170,77 +158,151 @@ REFERENCES residents(id_resident)
 
 ---
 
-# 📥 Inserción de Datos
+## residents ↔ activities
 
-El proyecto incluye registros de prueba para:
+Un residente puede participar en múltiples actividades.
 
-* Residentes
-* Cuidadores
-* Actividades
-* Historiales médicos
+```sql
+FOREIGN KEY (resident_id)
+REFERENCES residents(id_resident)
+```
+
+---
+
+# 📥 Generación de Datos
+
+Para cumplir con los requisitos del proyecto se generaron datos automáticamente mediante consultas recursivas.
+
+Cantidad de registros creados:
+
+| Tabla          | Registros |
+| -------------- | --------- |
+| residents      | 80        |
+| caregivers     | 20        |
+| health_records | 60        |
+| activities     | 50        |
+
+Esto permite realizar pruebas reales con JOINs y detectar registros sin relación.
 
 ---
 
 # 🔍 Consultas Implementadas
 
-## Mostrar cuidadores sin correo
+## Consulta 1 — INNER JOIN Principal
+
+Muestra los residentes que poseen historial médico.
 
 ```sql
 SELECT
-    id_caregiver,
-    name_caregiver
-FROM caregivers
-WHERE email_caregiver IS NULL;
+    r.id_resident,
+    r.name_resident,
+    hr.diagnosis,
+    hr.vital_status
+FROM residents r
+INNER JOIN health_records hr
+ON r.id_resident = hr.resident_id;
 ```
 
 ---
 
-## Mostrar actividades sin observaciones
+## Consulta 2 — JOIN con Tres Tablas
+
+Relaciona residentes, historiales médicos y actividades.
 
 ```sql
 SELECT
-    activity_name,
-    observations
-FROM activities
-WHERE observations IS NULL;
+    r.name_resident,
+    hr.diagnosis,
+    a.activity_name,
+    a.activity_status
+FROM residents r
+INNER JOIN health_records hr
+    ON r.id_resident = hr.resident_id
+INNER JOIN activities a
+    ON r.id_resident = a.resident_id;
 ```
 
 ---
 
-## Uso de COALESCE
+## Consulta 3 — LEFT JOIN
 
-Reemplaza valores NULL por texto personalizado.
+Muestra todos los residentes, tengan o no actividades registradas.
 
 ```sql
 SELECT
-    name_caregiver,
-    COALESCE(email_caregiver, 'Sin correo') AS email
-FROM caregivers;
+    r.id_resident,
+    r.name_resident,
+    a.activity_name
+FROM residents r
+LEFT JOIN activities a
+ON r.id_resident = a.resident_id;
+```
+
+---
+
+## Consulta 4 — Detección de Huérfanos
+
+Muestra residentes sin actividades registradas.
+
+```sql
+SELECT
+    r.id_resident,
+    r.name_resident
+FROM residents r
+LEFT JOIN activities a
+ON r.id_resident = a.resident_id
+WHERE a.id_activity IS NULL;
+```
+
+---
+
+## Consulta 5 — Reporte Agregado
+
+Cantidad de actividades realizadas por cada residente.
+
+```sql
+SELECT
+    r.id_resident,
+    r.name_resident,
+    COUNT(a.id_activity) AS total_actividades
+FROM residents r
+LEFT JOIN activities a
+ON r.id_resident = a.resident_id
+GROUP BY
+    r.id_resident,
+    r.name_resident
+ORDER BY total_actividades DESC;
 ```
 
 ---
 
 # ▶️ Cómo Ejecutar el Proyecto
 
-## 1. Abrir terminal en la carpeta del proyecto
+## 1. Abrir una terminal en la carpeta del proyecto
+
+```bash
+cd bc-sql
+```
+
+---
 
 ## 2. Ejecutar el script SQL
 
 ```bash
-sqlite3 mi_dominio.db < proyecto.sql
+sqlite3 casa_hogar.db < proyecto.sql
 ```
 
 ---
 
-## 3. Abrir SQLite manualmente
+## 3. Abrir SQLite
 
 ```bash
-sqlite3 mi_dominio.db
+sqlite3 casa_hogar.db
 ```
 
 ---
 
-## 4. Ver tablas
+## 4. Verificar tablas creadas
 
 ```sql
 .tables
@@ -256,27 +318,14 @@ SELECT * FROM residents;
 
 ---
 
-# ⚠️ Problema Común
+# 📊 Resultados Esperados
 
-Si ejecutas varias veces:
+El sistema debe permitir:
 
-```bash
-sqlite3 casa_hogar.db < proyecto.sql
-```
-
-Los datos pueden duplicarse.
-
----
-
-# ✅ Solución
-
-Agregar al inicio del archivo:
-
-```sql
-DROP TABLE IF EXISTS activities;
-DROP TABLE IF EXISTS health_records;
-DROP TABLE IF EXISTS caregivers;
-DROP TABLE IF EXISTS residents;
-```
+* Consultar residentes con historial médico.
+* Consultar actividades realizadas.
+* Identificar residentes sin actividades.
+* Generar reportes estadísticos mediante JOINs.
+* Analizar relaciones entre entidades.
 
 
