@@ -279,4 +279,3 @@ DROP TABLE IF EXISTS caregivers;
 DROP TABLE IF EXISTS residents;
 ```
 
-
