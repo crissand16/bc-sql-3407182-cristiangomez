@@ -179,3 +179,4 @@ WHERE resident_id BETWEEN 1 AND 4
   AND activity_type IN ('medical', 'physical')
   AND activity_status LIKE '%mplet%'
 ORDER BY activity_date;
+
