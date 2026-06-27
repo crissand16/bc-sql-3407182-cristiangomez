@@ -224,3 +224,4 @@ SELECT
 FROM residents
 WHERE is_active = 1;
 
+
