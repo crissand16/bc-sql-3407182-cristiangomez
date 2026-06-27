@@ -103,3 +103,4 @@ CREATE TABLE IF NOT EXISTS health_records (
 - Restricciones UNIQUE para evitar duplicados
 - Validaciones con CHECK
 - Valores por defecto con DEFAULT
+
