@@ -50,3 +50,4 @@ ORDER BY name_resident DESC;
 SELECT COUNT(*) AS total_residents
 FROM   residents;
 
+
