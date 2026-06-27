@@ -329,3 +329,4 @@ El sistema debe permitir:
 * Analizar relaciones entre entidades.
 
 
+
