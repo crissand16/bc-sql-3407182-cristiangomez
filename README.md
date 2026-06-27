@@ -1,4 +1,4 @@
-# 🏥 Sistema de Gestión Casa Hogar/Adultos Mayores
+# 🏡 Sistema de Gestión Casa Hogar/Adultos Mayores
 
 Este proyecto consiste en la creación y manipulación de una base de datos en **SQLite3** para la administración.
 
