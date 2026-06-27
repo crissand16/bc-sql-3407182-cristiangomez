@@ -40,3 +40,4 @@ CREATE TABLE IF NOT EXISTS health_records (
 --PRAGMA table_info(residents);
 --PRAGMA table_info(caregivers);
 --PRAGMA table_info(health_records);
+
