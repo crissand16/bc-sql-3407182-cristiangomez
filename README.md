@@ -1,4 +1,6 @@
-# 🗂️ Proyecto Semanal — DML (Manipulación de Datos)
+# 🏡 Sistema de Gestión de Residentes y Cuidadores de una Casa Hogar / Adultos Mayores
+
+Este proyecto consiste en la creación y manipulación de una base de datos relacional utilizando SQLite para gestionar información de residentes y cuidadores en una institución.
 
 ## 📌 Semana 03: INSERT INTO, UPDATE, DELETE
 
