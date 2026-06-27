@@ -49,3 +49,4 @@ ORDER BY name_resident DESC;
 --Contar cuántos residentes tiene en total
 SELECT COUNT(*) AS total_residents
 FROM   residents;
+
